@@ -14,6 +14,12 @@ stages:
       - job: javaSetup
         displayName: Java Environment
         steps:
+          - task: PowerShell@2
+            displayName: Java Verification
+            inputs:
+              targetType: 'inline'
+              script: 'java --version'
+
           - task: JavaToolInstaller@1
             displayName: Java Install
             inputs:
