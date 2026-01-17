@@ -1,7 +1,6 @@
 name: java-build_N_deploy-pipeline
 
-pool:
-  vmImage: ubuntu-latest
+pool: Azure Pipelines
 
 trigger: none
 
