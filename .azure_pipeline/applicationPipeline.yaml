@@ -11,16 +11,6 @@ stages:
   - stage: applicationBuild
     displayName: Application Build and Package Artifacts
     jobs:
-      - job: javaSetup
-        displayName: Java Environment
-        steps:
-          - task: JavaToolInstaller@1
-            displayName: Java Install
-            inputs:
-              versionSpec: '17'
-              jdkArchitectureOption: 'x86'
-              jdkSourceOption: 'PreInstalled'
-
       - job: mavenBuild
         displayName: Build with Maven
         dependsOn: javaSetup
