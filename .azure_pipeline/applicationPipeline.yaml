@@ -1,0 +1,34 @@
+name: java-build_N_deploy-pipeline
+
+pool:
+  vmImage: ubuntu-latest
+
+triggrt: none
+
+stages:
+  - stage: applicationBuild
+    displayName: Application Build and Package Artifacts
+    dependsOn: []
+    jobs:
+      - job: javaSetup
+        displayName: Java Environment
+        steps:
+          - task: JavaToolInstaller@1
+            displayName: Java Install
+            inputs:
+              versionSpec: '17'
+              jdkArchitectureOption: 'x86'
+              jdkSourceOption: 'PreInstalled'
+
+      - job: mavenBuild
+        displayName: Build with Maven
+        steps:
+          - task: Maven@3
+            displayName: Maven Clean Package
+            inputs:
+              mavenPomFile: 'pom.xml'
+              javaHomeOption: 'JDKVersion'
+              jdkVersionOption: '1.17'
+              jdkArchitectureOption: 'x64'
+              goals: 'clean package'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/frontend'
