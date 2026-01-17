@@ -8,7 +8,6 @@ trigger: none
 stages:
   - stage: applicationBuild
     displayName: Application Build and Package Artifacts
-    dependsOn: []
     jobs:
       - job: javaSetup
         displayName: Java Environment
