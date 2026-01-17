@@ -3,7 +3,7 @@ name: java-build_N_deploy-pipeline
 pool:
   vmImage: ubuntu-latest
 
-triggrt: none
+trigger: none
 
 stages:
   - stage: applicationBuild
@@ -26,9 +26,8 @@ stages:
           - task: Maven@3
             displayName: Maven Clean Package
             inputs:
-              mavenPomFile: 'pom.xml'
+              mavenPomFile: 'frontend/pom.xml'
               javaHomeOption: 'JDKVersion'
               jdkVersionOption: '1.17'
               jdkArchitectureOption: 'x64'
               goals: 'clean package'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/frontend'
