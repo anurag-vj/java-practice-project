@@ -21,7 +21,7 @@ stages:
 
       - job: mavenBuild
         displayName: Build with Maven
-        dependOn: javaSetup
+        dependsOn: javaSetup
         steps:
           - task: Maven@3
             displayName: Maven Clean Package
