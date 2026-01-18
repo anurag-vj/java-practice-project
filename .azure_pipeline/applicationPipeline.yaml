@@ -8,10 +8,9 @@ stages:
   - stage: applicationBuild
     displayName: Application Build and Package Artifacts
     jobs:
-    
+
       - job: mavenBuild
         displayName: Build with Maven
-        dependsOn: javaSetup
         steps:
 
           - task: PowerShell@2
