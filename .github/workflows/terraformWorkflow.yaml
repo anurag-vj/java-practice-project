@@ -1,0 +1,92 @@
+name: "Develop Environment Terraform Workflow"
+
+run-name: terraform-workflow-${{ github.run_id }} deploy-by ${{ github.actor }}
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  working-directory: './terraform'
+  TF_VARS_azure_devops_pat: ${{ secrets.AZURE_DEVOPS_PAT }}
+
+jobs:
+  terraform-init-plan:
+    name: "terraform init and terraform plan"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: latest
+
+      - name: Azure CLI Login
+        run: |
+            az login --service-principal \
+            --username $AZURE_CLIENT_ID \
+            --password $AZURE_CLIENT_SECRET \
+            --tenant $AZURE_TENANT_ID
+
+            az account set --subscription $AZURE_SUBSCRIPTION_ID
+        env:
+            AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+            AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+            AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+            AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: tarraform init
+        id: init
+        run: terraform init -input=false
+        working-directory: ${{ env.working-directory }}
+
+      - name: terraform fmt
+        id: fmt
+        run: terraform fmt -check -recursive
+        working-directory: ${{ env.working-directory }}
+
+      - name: terraform validate
+        id: validate
+        run: terraform validate
+        working-directory: ${{ env.working-directory }}
+
+      - name: terraform plan
+        id: plan
+        run: terraform plan -out=tfplan -input=false
+        working-directory: ${{ env.working-directory }}
+
+  terraform-apply:
+    name: "terraform apply"
+    runs-on: ubuntu-latest
+    needs: terraform-init-plan
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.13.2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.Azure_Client_ID }}
+          tenant-id: ${{ secrets.Azure_Tenant_ID }}
+          subscription-id: ${{ secrets.Azure_Subscription_ID }}
+
+      - name: terraform init
+        id: init
+        run: terraform init -input=false
+        working-directory: ${{ env.working-directory }}
+
+      - name: terraform apply
+        id: apply
+        run: terraform apply -input=false -auto-approve
+        working-directory: ${{ env.working-directory }}
