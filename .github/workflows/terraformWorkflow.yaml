@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   terraform-init-plan:
-    uses: anurag-vj/actions_reusable_workflows/.github/workflows/terraform_plan.yaml@main
+    uses: anurag-vj/devops-cicd-library/.github/workflows/terraform_plan.yaml@main
     secrets:
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
@@ -23,7 +23,7 @@ jobs:
       working_directory: './terraform'
 
   terraform-apply:
-    uses: anurag-vj/actions_reusable_workflows/.github/workflows/terraform_apply.yaml@main
+    uses: anurag-vj/devops-cicd-library/.github/workflows/terraform_apply.yaml@main
     secrets:
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
