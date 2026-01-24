@@ -17,8 +17,3 @@ variable "vm_password" {
 variable "subscription_id" {
   type = string
 }
-
-variable "azure_devops_pat" {
-  type      = string
-  sensitive = true
-}

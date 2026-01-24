@@ -72,10 +72,8 @@ resource "azurerm_linux_virtual_machine" "linux-vm" {
   network_interface_ids           = [azurerm_network_interface.nic.id]
 
   custom_data = base64encode(
-  templatefile("${path.module}/cloud-init.yaml", {
-    AZURE_DEVOPS_PAT = var.azure_devops_pat
-  })
-)
+    file("${path.module}/install-tomcat.sh")
+  )
 
   os_disk {
     caching              = "ReadWrite"

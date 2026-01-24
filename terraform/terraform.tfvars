@@ -1,5 +1,5 @@
 # Enter the name for assign to the azure_resource
-name = "sonarqube"
+name = "tomcat"
 
 # Enter the name for the azure_resource
 location = "centralindia"
